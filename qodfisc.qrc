@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>codfisc.png</file>
+        <file>icon.png</file>
+    </qresource>
+</RCC>

@@ -1,5 +1,5 @@
 TEMPLATE = app
-QT = gui core
+QT = gui core widgets
 CONFIG += qt release warn_on
 FORMS = mainwindow.ui
 HEADERS = qodfisc.h

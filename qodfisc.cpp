@@ -75,7 +75,7 @@ const QString QodFisc::getNome(const QString &nome) const
 {
 	QString strnome;
 	for(int i = 0; i < nome.length() && strnome.length() < 3; i++)
-		switch(nome[i].toAscii()) {
+		switch(nome[i].toLatin1()) {
 			case 'A':
 			case 'E':
 			case 'I':
@@ -85,7 +85,7 @@ const QString QodFisc::getNome(const QString &nome) const
 		}
 	if(strnome.length() < 3) {
 		for(int i = 0; i < nome.length() && strnome.length() < 3; i++)
-			switch(nome[i].toAscii()) {
+			switch(nome[i].toLatin1()) {
 				case 'A':
 				case 'E':
 				case 'I':
@@ -93,7 +93,7 @@ const QString QodFisc::getNome(const QString &nome) const
 				case 'U': strnome += nome[i];
 			}
 		if(strnome.length() < 3) {
-			char *padd[] = {"XXX", "XX", "X"};
+			const char *padd[] = {"XXX", "XX", "X"};
 			strnome += padd[strnome.length()];
 		}
 	}
@@ -140,9 +140,9 @@ const QString QodFisc::codControllo(const QString &cod_fis) const
 	int somma = 0;
 	for(int i = 0; i < 15; i++)
 		if(i % 2)
-			somma += cod_fis[i].toAscii() - (cod_fis[i].isDigit() ? '0' : 'A');
+			somma += cod_fis[i].toLatin1() - (cod_fis[i].isDigit() ? '0' : 'A');
 		else
-				switch(cod_fis[i].toAscii()) {
+				switch(cod_fis[i].toLatin1()) {
 				case '0':
 				case 'A': somma += 1; break;
 				case '1':
@@ -196,7 +196,7 @@ void QodFisc::calcolaSlot()
 
 const QString QodFisc::getCodice(const QString &cognome, const QString &nome, QDate data, bool femmina, const QString &comune) const
 {
-	char * indexMesi="ABCDEHLMPRST";
+	const char *indexMesi = "ABCDEHLMPRST";
 
 	QString anno = QString::number(data.year() % 100);
 	if(anno.length() == 1)

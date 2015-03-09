@@ -6,3 +6,7 @@ HEADERS = qodfisc.h
 SOURCES = qodfisc.cpp main.cpp
 RESOURCES += qodfisc.qrc
 RC_FILE = qodfisc.rc
+
+win32 {
+	LIBS += -static
+}

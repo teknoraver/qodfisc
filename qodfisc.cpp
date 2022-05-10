@@ -37,9 +37,9 @@ QodFisc::QodFisc(): QMainWindow()
 	move((QApplication::desktop()->screenGeometry(this).width() - width()) / 2, (QApplication::desktop()->screenGeometry(this).height() - height()) / 2);
 
 	QString prevprov;
-	for(int i = 0; i < comuni_length; i++) {
+	for (int i = 0; i < comuni_length; i++) {
 //		qDebug("prov=%s; comune=%s; codice=%s", buf.prov, buf.comune, buf.codice);
-		if(prevprov != comuni[i].prov) {
+		if (prevprov != comuni[i].prov) {
 			provinciaCB->addItem(comuni[i].prov);
 			prevprov = comuni[i].prov;
 		}
@@ -50,20 +50,20 @@ void QodFisc::provinciaSlot(const QString &selected) const
 {
 	comuneCB->clear();
 	int low = 0, high = comuni_length, i = (low + high) / 2;
-	for(; low <= high; i = (low + high) / 2) {
-		if(comuni[i].prov > selected)
+	for (; low <= high; i = (low + high) / 2) {
+		if (comuni[i].prov > selected)
 			high = i - 1;
-		else if(comuni[i].prov < selected)
+		else if (comuni[i].prov < selected)
 			low = i + 1;
 		else {
-			for(; i > 0; i--)
-				if(comuni[i - 1].prov != selected)
+			for (; i > 0; i--)
+				if (comuni[i - 1].prov != selected)
 					break;
 			break;
 		}
 	}
-	for(; i < comuni_length; i++) {
-		if(comuni[i].prov != selected)
+	for (; i < comuni_length; i++) {
+		if (comuni[i].prov != selected)
 			return;
 		comuneCB->addItem(comuni[i].comune);
 	}
@@ -74,8 +74,8 @@ void QodFisc::provinciaSlot(const QString &selected) const
 const QString QodFisc::getNome(const QString &nome) const
 {
 	QString strnome;
-	for(int i = 0; i < nome.length() && strnome.length() < 3; i++)
-		switch(nome[i].toLatin1()) {
+	for (int i = 0; i < nome.length() && strnome.length() < 3; i++)
+		switch (nome[i].toLatin1()) {
 			case 'A':
 			case 'E':
 			case 'I':
@@ -83,16 +83,16 @@ const QString QodFisc::getNome(const QString &nome) const
 			case 'U': break;
 			default: strnome += nome[i];
 		}
-	if(strnome.length() < 3) {
-		for(int i = 0; i < nome.length() && strnome.length() < 3; i++)
-			switch(nome[i].toLatin1()) {
+	if (strnome.length() < 3) {
+		for (int i = 0; i < nome.length() && strnome.length() < 3; i++)
+			switch (nome[i].toLatin1()) {
 				case 'A':
 				case 'E':
 				case 'I':
 				case 'O':
 				case 'U': strnome += nome[i];
 			}
-		if(strnome.length() < 3) {
+		if (strnome.length() < 3) {
 			const char *padd[] = {"XXX", "XX", "X"};
 			strnome += padd[strnome.length()];
 		}
@@ -106,7 +106,7 @@ const QString QodFisc::getGS(int giorno, bool femmina) const
 {
 	int gs = giorno + (40 * femmina);
 
-	if(gs < 10)
+	if (gs < 10)
 		return '0' + QString::number(gs);
 
 	return QString::number(gs);
@@ -115,22 +115,22 @@ const QString QodFisc::getGS(int giorno, bool femmina) const
 const QString QodFisc::getComune(const QString &prov, const QString &comune) const
 {
 	int low = 0, high = comuni_length, i = (low + high) / 2;
-	for(; low <= high; i = (low + high) / 2) {
-		if(comuni[i].prov > prov)
+	for (; low <= high; i = (low + high) / 2) {
+		if (comuni[i].prov > prov)
 			high = i - 1;
-		else if(comuni[i].prov < prov)
+		else if (comuni[i].prov < prov)
 			low = i + 1;
 		else
 			break;
 	}
 //	qDebug("bsearch stopped at %s", comuni[i].comune);
-	if(comuni[i].comune < comune) {
-		for(; i < comuni_length; i++)
-			if(comuni[i].comune == comune)
+	if (comuni[i].comune < comune) {
+		for (; i < comuni_length; i++)
+			if (comuni[i].comune == comune)
 				return comuni[i].codice;
-	} else if(comuni[i].comune > comune)
-		for(; i >= 0; i--)
-			if(comuni[i].comune == comune)
+	} else if (comuni[i].comune > comune)
+		for (; i >= 0; i--)
+			if (comuni[i].comune == comune)
 				return comuni[i].codice;
 	return comuni[i].codice;
 }
@@ -138,11 +138,11 @@ const QString QodFisc::getComune(const QString &prov, const QString &comune) con
 const QString QodFisc::codControllo(const QString &cod_fis) const
 {
 	int somma = 0;
-	for(int i = 0; i < 15; i++)
-		if(i % 2)
+	for (int i = 0; i < 15; i++)
+		if (i % 2)
 			somma += cod_fis[i].toLatin1() - (cod_fis[i].isDigit() ? '0' : 'A');
 		else
-				switch(cod_fis[i].toLatin1()) {
+			switch (cod_fis[i].toLatin1()) {
 				case '0':
 				case 'A': somma += 1; break;
 				case '1':
@@ -199,7 +199,7 @@ const QString QodFisc::getCodice(const QString &cognome, const QString &nome, QD
 	const char *indexMesi = "ABCDEHLMPRST";
 
 	QString anno = QString::number(data.year() % 100);
-	if(anno.length() == 1)
+	if (anno.length() == 1)
 		anno.prepend('0');
 	return codControllo(
 		getNome(cognome) +

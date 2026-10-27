@@ -17,7 +17,6 @@
  ****************************************************************************/
 
 #include <QMessageBox>
-#include <QDesktopWidget>
 
 #include "qodfisc.h"
 #include "comuni.h"
@@ -30,11 +29,10 @@ QodFisc::QodFisc(): QMainWindow()
 	UpperCaser *uc = new UpperCaser(this);
 	nomeLE->setValidator(uc);
 	cognomeLE->setValidator(uc);
-	connect(actionInfo, SIGNAL(triggered()), SLOT(about()));
-	connect(provinciaCB, SIGNAL(currentIndexChanged(const QString&)), SLOT(provinciaSlot(const QString&)));
-	connect(calcola, SIGNAL(clicked()), SLOT(calcolaSlot()));
+	connect(actionInfo, &QAction::triggered, this, &QodFisc::about);
+	connect(provinciaCB, &QComboBox::currentTextChanged, this, &QodFisc::provinciaSlot);
+	connect(calcola, &QPushButton::clicked, this, &QodFisc::calcolaSlot);
 	centralwidget->setAutoFillBackground(true);
-	move((QApplication::desktop()->screenGeometry(this).width() - width()) / 2, (QApplication::desktop()->screenGeometry(this).height() - height()) / 2);
 
 	QString prevprov;
 	for (int i = 0; i < comuni_length; i++) {
@@ -180,7 +178,7 @@ const QString QodFisc::codControllo(const QString &cod_fis) const
 				case 'Y': somma += 24; break;
 				case 'Z': somma += 23; break;
 			}
-	return cod_fis + (somma % 26 + 'A');
+	return cod_fis + QChar(somma % 26 + 'A');
 }
 
 void QodFisc::calcolaSlot()

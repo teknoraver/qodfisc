@@ -19,22 +19,22 @@
 #ifndef QODFISC_H
 #define QODFISC_H
 
+#include <QRegularExpression>
 
 #include "ui_mainwindow.h"
+
 class UpperCaser : public QValidator
 {
 Q_OBJECT
 public:
 	UpperCaser(QObject *p): QValidator(p) {}
-	~UpperCaser() {}
+	void fixup(QString&) const override {}
 
-	void fixup(QString&) const {}
-
-	State validate(QString &input, int&) const
+	State validate(QString &input, int&) const override
 	{
 		input = input.toUpper();
-		QRegExp alfanum(QString("[A-Z]+"));
-		if(!alfanum.exactMatch(input))
+		static const QRegularExpression alfanum(QRegularExpression::anchoredPattern("[A-Z]+"));
+		if(!alfanum.match(input).hasMatch())
 			return Invalid;
 		return Acceptable;
 	}

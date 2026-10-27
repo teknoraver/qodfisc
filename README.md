@@ -8,6 +8,8 @@ and can be copied with a click.
 The list of the municipalities dates back to 2007, so the ones created or renamed later,
 and people born abroad, are not supported.
 
+<p align="center"><img src="https://github.com/user-attachments/assets/eef9b548-c856-4ee2-b5b4-1ba0577272c2" alt="Qodfisc main window" width="902"></p>
+
 ## Build
 
 Requirements: CMake 3.19 or newer and Qt 6 (Widgets).

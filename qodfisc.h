@@ -49,9 +49,11 @@ public:
 	QodFisc();
 private slots:
 	void provinciaSlot(const QString&) const;
-	void calcolaSlot();
+	void aggiornaSlot();
+	void copiaSlot();
 	void about();
 private:
+	QAction *copia;
 	const QString getCodice(const QString&, const QString&, QDate, bool, const QString&) const;
 	const QString getNome(const QString&, bool) const;
 	const QString getGS(int, bool) const;

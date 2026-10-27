@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/" >
-        <file>codfisc.png</file>
+        <file>tessera.jpg</file>
+        <file>copia.png</file>
         <file>icon.png</file>
     </qresource>
 </RCC>

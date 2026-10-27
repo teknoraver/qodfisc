@@ -16,7 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.   *
  ****************************************************************************/
 
+#include <QClipboard>
+#include <QFontDatabase>
+#include <QLayout>
 #include <QMessageBox>
+#include <QPainter>
+#include <QPainterPath>
+#include <QToolTip>
 
 #include "qodfisc.h"
 #include "comuni.h"
@@ -25,23 +31,61 @@
 QodFisc::QodFisc(): QMainWindow()
 {
 	setupUi(this);
+	layout()->setSizeConstraint(QLayout::SetFixedSize);
+
+	// the health insurance card, with rounded corners, is the background;
+	// the image has twice the resolution of the window, for HiDPI screens
+	QPixmap tessera(":/tessera.jpg");
+	qreal dpr = tessera.width() / qreal(sfondo->width());
+	QPixmap bg(tessera.size());
+	bg.fill(Qt::transparent);
+	QPainter p(&bg);
+	p.setRenderHint(QPainter::Antialiasing);
+	QPainterPath bordo;
+	bordo.addRoundedRect(bg.rect(), 36 * dpr, 36 * dpr);
+	p.setClipPath(bordo);
+	p.drawPixmap(0, 0, tessera);
+	p.end();
+	bg.setDevicePixelRatio(dpr);
+	sfondo->setPixmap(bg);
+
+	const QList<QWidget *> campi = {cfLE, cognomeLE, nomeLE, comuneCB, provinciaCB};
+	for (QWidget *w : campi) {
+		QPalette pal = w->palette();
+		pal.setColor(QPalette::PlaceholderText, QColor(27, 61, 122, 130));
+		w->setPalette(pal);
+	}
+
+	QFont mono = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+	mono.setPointSizeF(font().pointSizeF() * 1.4);
+	mono.setLetterSpacing(QFont::AbsoluteSpacing, 1);
+	cfLE->setFont(mono);
+	copia = cfLE->addAction(QIcon::fromTheme(QIcon::ThemeIcon::EditCopy, QIcon(":/copia.png")), QLineEdit::TrailingPosition);
+	copia->setToolTip("Copia il codice fiscale");
+	copia->setEnabled(false);
 
 	UpperCaser *uc = new UpperCaser(this);
 	nomeLE->setValidator(uc);
 	cognomeLE->setValidator(uc);
-	connect(actionInfo, &QAction::triggered, this, &QodFisc::about);
-	connect(provinciaCB, &QComboBox::currentTextChanged, this, &QodFisc::provinciaSlot);
-	connect(calcola, &QPushButton::clicked, this, &QodFisc::calcolaSlot);
-	centralwidget->setAutoFillBackground(true);
 
 	QString prevprov;
 	for (int i = 0; i < comuni_length; i++) {
-//		qDebug("prov=%s; comune=%s; codice=%s", buf.prov, buf.comune, buf.codice);
 		if (prevprov != comuni[i].prov) {
 			provinciaCB->addItem(comuni[i].prov);
 			prevprov = comuni[i].prov;
 		}
 	}
+	// the province must be chosen first, then the comune
+	provinciaCB->setCurrentIndex(-1);
+
+	connect(actionInfo, &QAction::triggered, this, &QodFisc::about);
+	connect(copia, &QAction::triggered, this, &QodFisc::copiaSlot);
+	connect(provinciaCB, &QComboBox::currentTextChanged, this, &QodFisc::provinciaSlot);
+	connect(comuneCB, &QComboBox::currentIndexChanged, this, &QodFisc::aggiornaSlot);
+	connect(cognomeLE, &QLineEdit::textChanged, this, &QodFisc::aggiornaSlot);
+	connect(nomeLE, &QLineEdit::textChanged, this, &QodFisc::aggiornaSlot);
+	connect(dataDE, &QDateEdit::dateChanged, this, &QodFisc::aggiornaSlot);
+	connect(sexF, &QRadioButton::toggled, this, &QodFisc::aggiornaSlot);
 }
 
 void QodFisc::provinciaSlot(const QString &selected) const
@@ -62,9 +106,12 @@ void QodFisc::provinciaSlot(const QString &selected) const
 	}
 	for (; i < comuni_length; i++) {
 		if (comuni[i].prov != selected)
-			return;
+			break;
 		comuneCB->addItem(comuni[i].comune);
 	}
+	comuneCB->setCurrentIndex(-1);
+	comuneCB->setPlaceholderText("scegli il comune");
+	comuneCB->setEnabled(true);
 }
 
 
@@ -171,15 +218,24 @@ const QString QodFisc::codControllo(const QString &cod_fis) const
 	return cod_fis + QChar(somma % 26 + 'A');
 }
 
-void QodFisc::calcolaSlot()
+void QodFisc::aggiornaSlot()
 {
-	QMessageBox::information(this, "Codice Fiscale",
-	getCodice(
-		cognomeLE->text(),
-		nomeLE->text(),
-		dataDE->date(),
-		sexF->isChecked(),
-		comuneCB->currentText()));
+	if (cognomeLE->text().isEmpty() || nomeLE->text().isEmpty() || comuneCB->currentIndex() < 0)
+		cfLE->clear();
+	else
+		cfLE->setText(getCodice(
+			cognomeLE->text(),
+			nomeLE->text(),
+			dataDE->date(),
+			sexF->isChecked(),
+			comuneCB->currentText()));
+	copia->setEnabled(!cfLE->text().isEmpty());
+}
+
+void QodFisc::copiaSlot()
+{
+	QGuiApplication::clipboard()->setText(cfLE->text());
+	QToolTip::showText(cfLE->mapToGlobal(QPoint(cfLE->width(), 0)), "Copiato", cfLE);
 }
 
 const QString QodFisc::getCodice(const QString &cognome, const QString &nome, QDate data, bool femmina, const QString &comune) const

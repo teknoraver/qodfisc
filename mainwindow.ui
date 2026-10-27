@@ -6,27 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>468</width>
-    <height>362</height>
+    <width>800</width>
+    <height>551</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>468</width>
-    <height>362</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>468</width>
-    <height>362</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>Qodfisc</string>
@@ -36,70 +18,150 @@
     <normaloff>:/icon.png</normaloff>:/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="calcola">
+   <property name="minimumSize">
+    <size>
+     <width>800</width>
+     <height>516</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>800</width>
+     <height>516</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#cfLE, #cognomeLE, #nomeLE, #comuneCB, #provinciaCB, #dataDE {
+	background-color: rgba(255, 255, 255, 170);
+	color: #1b3d7a;
+	selection-background-color: #1b3d7a;
+	selection-color: white;
+	border: 1px solid rgba(27, 61, 122, 110);
+	border-radius: 4px;
+	padding: 0 4px;
+	font-weight: bold;
+}
+#cfLE:focus, #cognomeLE:focus, #nomeLE:focus, #comuneCB:focus, #provinciaCB:focus, #dataDE:focus {
+	background-color: rgba(255, 255, 255, 225);
+	border: 1px solid #1b3d7a;
+}
+#comuneCB:disabled {
+	background-color: rgba(255, 255, 255, 90);
+}
+#sexM, #sexF {
+	color: #1b3d7a;
+	font-weight: bold;
+}</string>
+   </property>
+   <widget class="QLabel" name="sfondo">
     <property name="geometry">
      <rect>
-      <x>4</x>
-      <y>303</y>
-      <width>460</width>
-      <height>27</height>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>516</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>Calcola</string>
-    </property>
-    <property name="autoDefault">
-     <bool>true</bool>
-    </property>
-    <property name="default">
-     <bool>true</bool>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QLineEdit" name="cfLE">
     <property name="geometry">
      <rect>
-      <x>267</x>
-      <y>199</y>
-      <width>197</width>
-      <height>67</height>
+      <x>175</x>
+      <y>194</y>
+      <width>305</width>
+      <height>34</height>
      </rect>
     </property>
-    <property name="title">
-     <string>&amp;Sesso</string>
+    <property name="focusPolicy">
+     <enum>Qt::FocusPolicy::ClickFocus</enum>
     </property>
-    <property name="checkable">
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="placeholderText">
+     <string>compila tutti i campi</string>
+    </property>
+    <property name="accessibleName">
+     <string>Codice fiscale</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="cognomeLE">
+    <property name="geometry">
+     <rect>
+      <x>175</x>
+      <y>256</y>
+      <width>305</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>ROSSI</string>
+    </property>
+    <property name="accessibleName">
+     <string>Cognome</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="nomeLE">
+    <property name="geometry">
+     <rect>
+      <x>175</x>
+      <y>291</y>
+      <width>305</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>MARIO</string>
+    </property>
+    <property name="accessibleName">
+     <string>Nome</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comuneCB">
+    <property name="enabled">
      <bool>false</bool>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QRadioButton" name="sexM">
-       <property name="text">
-        <string>M</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="sexF">
-       <property name="text">
-        <string>F</string>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="geometry">
+     <rect>
+      <x>175</x>
+      <y>342</y>
+      <width>305</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>prima scegli la provincia</string>
+    </property>
+    <property name="accessibleName">
+     <string>Luogo di nascita</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="provinciaCB">
+    <property name="geometry">
+     <rect>
+      <x>175</x>
+      <y>394</y>
+      <width>90</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="maxVisibleItems">
+     <number>20</number>
+    </property>
+    <property name="placeholderText">
+     <string>--</string>
+    </property>
+    <property name="accessibleName">
+     <string>Provincia</string>
+    </property>
    </widget>
    <widget class="QDateEdit" name="dataDE">
     <property name="geometry">
      <rect>
-      <x>354</x>
-      <y>271</y>
-      <width>110</width>
-      <height>26</height>
+      <x>175</x>
+      <y>448</y>
+      <width>140</width>
+      <height>28</height>
      </rect>
     </property>
     <property name="displayFormat">
@@ -108,154 +170,37 @@
     <property name="calendarPopup">
      <bool>true</bool>
     </property>
+    <property name="accessibleName">
+     <string>Data di nascita</string>
+    </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QRadioButton" name="sexM">
     <property name="geometry">
      <rect>
-      <x>179</x>
-      <y>271</y>
-      <width>171</width>
-      <height>27</height>
+      <x>662</x>
+      <y>312</y>
+      <width>50</width>
+      <height>26</height>
      </rect>
     </property>
     <property name="text">
-     <string>&amp;DATA DI NASCITA</string>
+     <string>&amp;M</string>
     </property>
-    <property name="buddy">
-     <cstring>dataDE</cstring>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="cognomeLE">
-    <property name="geometry">
-     <rect>
-      <x>92</x>
-      <y>166</y>
-      <width>372</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="placeholderText">
-     <string>ROSSI</string>
+    <property name="checked">
+     <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLineEdit" name="nomeLE">
+   <widget class="QRadioButton" name="sexF">
     <property name="geometry">
      <rect>
-      <x>92</x>
-      <y>133</y>
-      <width>372</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="placeholderText">
-     <string>MARIO</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comuneCB">
-    <property name="geometry">
-     <rect>
-      <x>92</x>
-      <y>219</y>
-      <width>171</width>
-      <height>27</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="provinciaCB">
-    <property name="geometry">
-     <rect>
-      <x>92</x>
-      <y>271</y>
-      <width>83</width>
-      <height>27</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>4</x>
-      <y>166</y>
-      <width>84</width>
-      <height>28</height>
+      <x>718</x>
+      <y>312</y>
+      <width>50</width>
+      <height>26</height>
      </rect>
     </property>
     <property name="text">
-     <string>&amp;COGNOME</string>
-    </property>
-    <property name="buddy">
-     <cstring>cognomeLE</cstring>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>4</x>
-      <y>133</y>
-      <width>84</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&amp;NOME</string>
-    </property>
-    <property name="buddy">
-     <cstring>nomeLE</cstring>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>4</x>
-      <y>271</y>
-      <width>84</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&amp;PROVINCIA</string>
-    </property>
-    <property name="buddy">
-     <cstring>provinciaCB</cstring>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_5">
-    <property name="geometry">
-     <rect>
-      <x>4</x>
-      <y>199</y>
-      <width>84</width>
-      <height>67</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&amp;LUOGO DI
-NASCITA</string>
-    </property>
-    <property name="buddy">
-     <cstring>comuneCB</cstring>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>4</x>
-      <y>5</y>
-      <width>460</width>
-      <height>123</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap resource="qodfisc.qrc">:/codfisc.png</pixmap>
+     <string>&amp;F</string>
     </property>
    </widget>
   </widget>
@@ -264,7 +209,7 @@ NASCITA</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>468</width>
+     <width>800</width>
      <height>35</height>
     </rect>
    </property>
@@ -295,14 +240,13 @@ NASCITA</string>
   </action>
  </widget>
  <tabstops>
-  <tabstop>nomeLE</tabstop>
   <tabstop>cognomeLE</tabstop>
+  <tabstop>nomeLE</tabstop>
+  <tabstop>provinciaCB</tabstop>
   <tabstop>comuneCB</tabstop>
+  <tabstop>dataDE</tabstop>
   <tabstop>sexM</tabstop>
   <tabstop>sexF</tabstop>
-  <tabstop>provinciaCB</tabstop>
-  <tabstop>dataDE</tabstop>
-  <tabstop>calcola</tabstop>
  </tabstops>
  <resources>
   <include location="qodfisc.qrc"/>
@@ -319,8 +263,8 @@ NASCITA</string>
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>220</x>
-     <y>188</y>
+     <x>400</x>
+     <y>270</y>
     </hint>
    </hints>
   </connection>

@@ -33,7 +33,9 @@ public:
 	State validate(QString &input, int&) const override
 	{
 		input = input.toUpper();
-		static const QRegularExpression alfanum(QRegularExpression::anchoredPattern("[A-Z]+"));
+		if(input.isEmpty())
+			return Intermediate;
+		static const QRegularExpression alfanum(QRegularExpression::anchoredPattern("[\\p{L}' ]+"));
 		if(!alfanum.match(input).hasMatch())
 			return Invalid;
 		return Acceptable;
@@ -51,7 +53,7 @@ private slots:
 	void about();
 private:
 	const QString getCodice(const QString&, const QString&, QDate, bool, const QString&) const;
-	const QString getNome(const QString&) const;
+	const QString getNome(const QString&, bool) const;
 	const QString getGS(int, bool) const;
 	const QString getComune(const QString&, const QString&) const;
 	const QString codControllo(const QString&) const;

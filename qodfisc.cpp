@@ -69,35 +69,25 @@ void QodFisc::provinciaSlot(const QString &selected) const
 
 
 
-const QString QodFisc::getNome(const QString &nome) const
+const QString QodFisc::getNome(const QString &str, bool nome) const
 {
-	QString strnome;
-	for (int i = 0; i < nome.length() && strnome.length() < 3; i++)
-		switch (nome[i].toLatin1()) {
-			case 'A':
-			case 'E':
-			case 'I':
-			case 'O':
-			case 'U': break;
-			default: strnome += nome[i];
-		}
-	if (strnome.length() < 3) {
-		for (int i = 0; i < nome.length() && strnome.length() < 3; i++)
-			switch (nome[i].toLatin1()) {
-				case 'A':
-				case 'E':
-				case 'I':
-				case 'O':
-				case 'U': strnome += nome[i];
-			}
-		if (strnome.length() < 3) {
-			const char *padd[] = {"XXX", "XX", "X"};
-			strnome += padd[strnome.length()];
-		}
+	QString consonanti, vocali;
+
+	// decompose accented letters and skip spaces and apostrophes
+	for (QChar c : str.toUpper().normalized(QString::NormalizationForm_D)) {
+		if (c < u'A' || c > u'Z')
+			continue;
+		if (QStringLiteral("AEIOU").contains(c))
+			vocali += c;
+		else
+			consonanti += c;
 	}
 
-// 	qDebug(qPrintable("NOMCOG: " + strcognome+strnome));
-	return strnome;
+	// first names with at least 4 consonants take the 1st, 3rd and 4th
+	if (nome && consonanti.length() >= 4)
+		return QString(consonanti[0]) + consonanti[2] + consonanti[3];
+
+	return (consonanti + vocali + "XXX").left(3);
 }
 
 const QString QodFisc::getGS(int giorno, bool femmina) const
@@ -200,8 +190,8 @@ const QString QodFisc::getCodice(const QString &cognome, const QString &nome, QD
 	if (anno.length() == 1)
 		anno.prepend('0');
 	return codControllo(
-		getNome(cognome) +
-		getNome(nome) +
+		getNome(cognome, false) +
+		getNome(nome, true) +
 		anno +
 		indexMesi[data.month() - 1] +
 		getGS(data.day(), femmina) +

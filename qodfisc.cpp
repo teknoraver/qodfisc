@@ -256,5 +256,5 @@ const QString QodFisc::getCodice(const QString &cognome, const QString &nome, QD
 
 void QodFisc::about()
 {
-	QMessageBox::about(this, "Informazioni su Qodfisc", "<b>Qodfisc</b><br><br>Matteo Croce <a href=\"http://teknoraver.net/\">http://teknoraver.net/</a><br>Natale Vinto <a href=\"http://gotext.org/\">http://gotext.org/</a>");
+	QMessageBox::about(this, "Informazioni su Qodfisc", "<b>Qodfisc</b><br><br>Matteo Croce <a href=\"https://matteocroce.it/\">https://matteocroce.it/</a><br>Natale Vinto <a href=\"https://natalevinto.it/\">https://natalevinto.it/</a>");
 }

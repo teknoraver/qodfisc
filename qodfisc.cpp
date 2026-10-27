@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2006-2007 Matteo Croce <rootkit85@yahoo.it>
 
+#include <QAbstractItemView>
 #include <QClipboard>
 #include <QFontDatabase>
 #include <QLayout>
 #include <QMessageBox>
 #include <QPainter>
 #include <QPainterPath>
+#include <QScrollBar>
 #include <QToolTip>
 
 #include "qodfisc.h"
@@ -67,6 +69,7 @@ QodFisc::QodFisc(): QMainWindow()
 	connect(copia, &QAction::triggered, this, &QodFisc::copiaSlot);
 	connect(provinciaCB, &QComboBox::currentTextChanged, this, &QodFisc::provinciaSlot);
 	connect(comuneCB, &QComboBox::currentIndexChanged, this, &QodFisc::aggiornaSlot);
+	connect(comuneCB, &QComboBox::currentTextChanged, comuneCB, &QWidget::setToolTip);
 	connect(cognomeLE, &QLineEdit::textChanged, this, &QodFisc::aggiornaSlot);
 	connect(nomeLE, &QLineEdit::textChanged, this, &QodFisc::aggiornaSlot);
 	connect(dataDE, &QDateEdit::dateChanged, this, &QodFisc::aggiornaSlot);
@@ -97,6 +100,10 @@ void QodFisc::provinciaSlot(const QString &selected) const
 	comuneCB->setCurrentIndex(-1);
 	comuneCB->setPlaceholderText("scegli il comune");
 	comuneCB->setEnabled(true);
+
+	// some names don't fit in the field, make the list wide enough for them
+	QAbstractItemView *view = comuneCB->view();
+	view->setMinimumWidth(view->sizeHintForColumn(0) + view->verticalScrollBar()->sizeHint().width() + 8);
 }
 
 
@@ -134,25 +141,10 @@ const QString QodFisc::getGS(int giorno, bool femmina) const
 
 const QString QodFisc::getComune(const QString &prov, const QString &comune) const
 {
-	int low = 0, high = comuni_length, i = (low + high) / 2;
-	for (; low <= high; i = (low + high) / 2) {
-		if (comuni[i].prov > prov)
-			high = i - 1;
-		else if (comuni[i].prov < prov)
-			low = i + 1;
-		else
-			break;
-	}
-//	qDebug("bsearch stopped at %s", comuni[i].comune);
-	if (comuni[i].comune < comune) {
-		for (; i < comuni_length; i++)
-			if (comuni[i].comune == comune)
-				return comuni[i].codice;
-	} else if (comuni[i].comune > comune)
-		for (; i >= 0; i--)
-			if (comuni[i].comune == comune)
-				return comuni[i].codice;
-	return comuni[i].codice;
+	for (int i = 0; i < comuni_length; i++)
+		if (comuni[i].prov == prov && comuni[i].comune == comune)
+			return comuni[i].codice;
+	return QString();
 }
 
 const QString QodFisc::codControllo(const QString &cod_fis) const
